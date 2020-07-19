@@ -6,7 +6,7 @@ import (
   "net/http"
   "log"
   "golang.org/x/net/websocket"
-  "github.com/christianrondeau/go-wit"
+  wit "github.com/christianrondeau/go-wit"
 )
 
 const (
@@ -18,7 +18,7 @@ type T struct {
 }
 
 var (
-  witClient *Client
+  witClient *wit.Client
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
