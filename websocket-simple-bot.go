@@ -42,8 +42,8 @@ func WebsocketServer(ws *websocket.Conn) {
     }
     //log.Println(result.Entities["intent"].value)
     log.Println(result)
-    data, _ := json.MarshalIndent(result, "", "    ")
-    log.Println(string(data[:]))
+    //data, _ := json.MarshalIndent(result, "", "    ")
+    //log.Println(string(data[:]))
 
     data.Txt = result
     websocket.JSON.Send(ws, data)
