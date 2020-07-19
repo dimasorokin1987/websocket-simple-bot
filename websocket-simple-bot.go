@@ -36,17 +36,28 @@ func processRequest(ws *websocket.Conn){
 func EchoServer(ws *websocket.Conn) {
   //io.Copy(ws, ws)
   for {
-    go processRequest(ws)
+    processRequest(ws)
   }
 }
 
 func main() {
-  http.Handle("/", http.FileServer(http.Dir(directory)))
+  port := os.Getenv("PORT")
+  mux := http.NewServeMux()
+  mux.Handle("/", http.FileServer(http.Dir(directory)))
+  mux.Handle("/test", http.HandlerFunc(indexHandler))
+  mux.Handle("/ws", websocket.Handler(EchoServer))
+  s := http.Server{Addr: ":" + port, Handler: mux}
+  err := s.ListenAndServe()
+  if err != nil {
+    log.Fatalln("ListenAndServe: " + err.Error())
+  }
+
+/*http.Handle("/", http.FileServer(http.Dir(directory)))
   http.Handle("/ws", websocket.Handler(EchoServer))
   // err := http.ListenAndServe(":12345", nil)
   http.Handle("/test", http.HandlerFunc(indexHandler))
   err := http.ListenAndServe(":"+os.Getenv("PORT"), nil)
   if err != nil {
     log.Fatalln("ListenAndServe: " + err.Error())
-  }
+  }*/
 }
