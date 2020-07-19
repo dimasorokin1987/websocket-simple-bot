@@ -5,6 +5,7 @@ import (
   "os"
   "net/http"
   "log"
+  "encoding/json"
   "golang.org/x/net/websocket"
   wit "github.com/christianrondeau/go-wit"
 )
