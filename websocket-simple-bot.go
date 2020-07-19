@@ -8,6 +8,7 @@ import (
   //"encoding/json"
   "golang.org/x/net/websocket"
   wit "github.com/christianrondeau/go-wit"
+  wolfram "github.com/Krognol/go-wolfram"
 )
 
 const (
@@ -21,6 +22,7 @@ type T struct {
 
 var (
   witClient *wit.Client
+  wolframClient *wolfram.Client
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +60,12 @@ func WebsocketServer(ws *websocket.Conn) {
       case "greetings":
         data.Txt = "Hello, user! How can I help you?"
       case "wolfram_search_query":
-        // TODO
+        res, err := wolframClient.GetSpokentAnswerQuery(topEntity.Value.(string), wolfram.Metric, 1000)
+        if err == nil {
+          data.Txt = res
+        } else {
+          log.Println("wolfram client: " + err.Error())
+        }
       default:
         data.Txt = "¯\\_(o_o)_/¯"
     }
@@ -70,7 +77,10 @@ func WebsocketServer(ws *websocket.Conn) {
 func main() {
   port := os.Getenv("PORT")
   witAiAccessToken := os.Getenv("WIT_AI_ACCESS_TOKEN")
+  wolframAppId := os.Getenv("WOLFRAM_APP_ID")
+
   witClient = wit.NewClient(witAiAccessToken)
+  wolframClient = &wolfram.Client{AppID: wolframAppId}
 
   mux := http.NewServeMux()
   mux.Handle("/", http.FileServer(http.Dir(directory)))
