@@ -17,6 +17,10 @@ type T struct {
   Txt string `json:"text"`
 }
 
+var (
+  witClient *Client
+)
+
 func indexHandler(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, "Hello World!")
 }
@@ -28,14 +32,17 @@ func WebsocketServer(ws *websocket.Conn) {
     if err != nil {
       log.Fatalln("error receiving json")
     }
+    result, err := witClient.Message(data.Txt)
+    log.Println(result.Entities["intent"].value)
+    data.Txt = result.Entities["intent"].value
     websocket.JSON.Send(ws, data)
   }
 }
 
 func main() {
   port := os.Getenv("PORT")
-  wit_ai_access_token := os.Getenv("WIT_AI_ACCESS_TOKEN")
-  wit_client := wit.NewClient(wit_ai_access_token)
+  witAiAccessToken := os.Getenv("WIT_AI_ACCESS_TOKEN")
+  witClient = wit.NewClient(witAiAccessToken)
 
   mux := http.NewServeMux()
   mux.Handle("/", http.FileServer(http.Dir(directory)))
