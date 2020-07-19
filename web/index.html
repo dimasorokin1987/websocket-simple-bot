@@ -7,24 +7,37 @@
   </head>
   <body>
     <h1>hello world 111</h1>
+    <input type="text" id="txt">
+    <button id="send">ok</button>
     <script>
-      //let url = "wss://javascript.info/chat"
-      let url = `wss://${location.hostname}/ws`
+      const $txt=document.querySelector('#txt');
+      const $btnSend=document.querySelector('#send');
+      
+      //let url = 'wss://javascript.info/chat'
+      const url = `wss://${location.hostname}/ws`
       alert(url)
-      let socket = new WebSocket(url)
+      const socket = new WebSocket(url);
+      
+      const sendMessage=()=>{
+       socket.send($txt.value);
+       alert('sended: '+$txt.value);
+      };
+      
       socket.onopen = function() {
-        alert("Connected.")
-        socket.send("hello")
-        alert("sended: hello")
+        alert('Connected.')
+        $btnSend.addEventListener(sendMessage);
+        //socket.send('hello')
+        //alert('sended: hello')
       }
 
       socket.onclose = function(event) {
         if (event.wasClean) {
-          alert("Connection close clean")
+          alert('Connection close clean')
         } else {
           alert('Connection aborted') // например, "убит" процесс сервера
         }
         alert('Code: ' + event.code + ' reason: ' + event.reason)
+        $btnSend.removeEventListener(sendMessage);
       }
 
       socket.onmessage = function(event) {
