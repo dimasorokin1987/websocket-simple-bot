@@ -26,12 +26,14 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 func EchoServer(ws *websocket.Conn) {
   //go func()
   //io.Copy(ws, ws)
-  data := T{}
-  err := websocket.JSON.Receive(ws, &data) 
-  if err != nil {
-    log.Fatalln("error receiving json")
+  for {
+    data := T{}
+    err := websocket.JSON.Receive(ws, &data) 
+    if err != nil {
+      log.Fatalln("error receiving json")
+    }
+    websocket.JSON.Send(ws, data)
   }
-  websocket.JSON.Send(ws, data)
 }
 
 func main() {
