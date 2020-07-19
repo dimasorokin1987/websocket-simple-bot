@@ -25,7 +25,7 @@
       
       socket.onopen = function() {
         alert('Connected.')
-        $btnSend.addEventListener(sendMessage);
+        $btnSend.addEventListener('click',sendMessage);
         //socket.send('hello')
         //alert('sended: hello')
       }
@@ -37,7 +37,7 @@
           alert('Connection aborted') // например, "убит" процесс сервера
         }
         alert('Code: ' + event.code + ' reason: ' + event.reason)
-        $btnSend.removeEventListener(sendMessage);
+        $btnSend.removeEventListener('click',sendMessage);
       }
 
       socket.onmessage = function(event) {
