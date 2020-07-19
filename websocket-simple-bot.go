@@ -14,26 +14,29 @@ const (
 )
 
 type T struct {
-  Msg string
-  Count int
+  Txt string
+ // Msg string
+ // Count int
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, "Hello World!")
 }
 
+func processRequest(ws){
+  data := T{}
+  err := websocket.JSON.Receive(ws, &data) 
+  if err != nil {
+    log.Fatalln("error receiving json")
+  }
+  websocket.JSON.Send(ws, data)
+}
+
 // Echo the data received on the WebSocket. 
 func EchoServer(ws *websocket.Conn) {
   //io.Copy(ws, ws)
   for {
-    go func(){
-      data := T{}
-      err := websocket.JSON.Receive(ws, &data) 
-      if err != nil {
-        log.Fatalln("error receiving json")
-      }
-      websocket.JSON.Send(ws, data)
-    }()
+    go processRequest(ws)
   }
 }
 
