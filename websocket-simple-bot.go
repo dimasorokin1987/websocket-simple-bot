@@ -33,6 +33,9 @@ func WebsocketServer(ws *websocket.Conn) {
       log.Fatalln("error receiving json")
     }
     result, err := witClient.Message(data.Txt)
+    if err != nil {
+      log.Fatalln("error wit processing message")
+    }
     log.Println(result.Entities["intent"].value)
     data.Txt = result.Entities["intent"].value
     websocket.JSON.Send(ws, data)
