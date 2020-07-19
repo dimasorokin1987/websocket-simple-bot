@@ -32,12 +32,15 @@ func WebsocketServer(ws *websocket.Conn) {
     if err != nil {
       log.Fatalln("error receiving json")
     }
-    result, err := witClient.Message(data.Txt)
+    //result, err := witClient.Message(data.Txt)
+    result, err := witClient.Parse(&wit.MessageRequest{
+      Query: "hello",
+    })
     if err != nil {
       log.Fatalln("error wit processing message")
     }
-    log.Println(result.Entities["intent"].value)
-    data.Txt = result.Entities["intent"].value
+    //log.Println(result.Entities["intent"].value)
+    data.Txt = result
     websocket.JSON.Send(ws, data)
   }
 }
