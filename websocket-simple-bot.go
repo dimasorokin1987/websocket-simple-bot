@@ -59,6 +59,8 @@ func WebsocketServer(ws *websocket.Conn) {
         data.Txt = "Hello, user! How can I help you?"
       case "wolfram_search_query":
         // TODO
+      default:
+        data.Txt = "¯\\_(o_o)_/¯"
     }
 
     websocket.JSON.Send(ws, data)
