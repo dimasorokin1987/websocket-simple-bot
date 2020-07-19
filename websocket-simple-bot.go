@@ -38,10 +38,7 @@ func WebsocketServer(ws *websocket.Conn) {
     if err != nil {
       log.Fatalln("error wit processing message")
     }
-    //log.Println(result)
-    //data, _ := json.MarshalIndent(result, "", "    ")
-    //log.Println(string(data[:]))
-    log.Printf("%v\n", result)
+    //log.Printf("%v\n", result)
 
     var (
       topEntity    wit.MessageEntity
@@ -57,7 +54,13 @@ func WebsocketServer(ws *websocket.Conn) {
       }
     }
 
-    data.Txt = topEntityKey
+    switch topEntityKey {
+      case "greetings":
+        data.Txt = "Hello, user! How can I help you?"
+      case "wolfram_search_query":
+        // TODO
+    }
+
     websocket.JSON.Send(ws, data)
   }
 }
