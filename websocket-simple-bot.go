@@ -31,10 +31,7 @@ func EchoServer(ws *websocket.Conn) {
   if err != nil {
     log.Fatalln("error receiving json")
   }
-  err := websocket.JSON.Send(ws, data)
-  if err != nil {
-    log.Fatalln("error sending json")
-  }
+  websocket.JSON.Send(ws, data)
 }
 
 func main() {
