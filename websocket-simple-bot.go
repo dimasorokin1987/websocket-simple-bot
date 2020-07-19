@@ -23,7 +23,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
   fmt.Fprintf(w, "Hello World!")
 }
 
-func processRequest(ws){
+func processRequest(ws *websocket.Conn){
   data := T{}
   err := websocket.JSON.Receive(ws, &data) 
   if err != nil {
