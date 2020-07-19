@@ -14,7 +14,7 @@ const (
 )
 
 type T struct {
-  Txt string
+  Txt string `json:"text"`
  // Msg string
  // Count int
 }
