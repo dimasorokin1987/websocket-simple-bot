@@ -40,6 +40,6 @@ func main() {
   s := http.Server{Addr: ":" + port, Handler: mux}
   err := s.ListenAndServe()
   if err != nil {
-    log.Fatalln("ListenAndServe: " + err.Error)
+    log.Fatalln("ListenAndServe: " + err.Error())
   }
 }
