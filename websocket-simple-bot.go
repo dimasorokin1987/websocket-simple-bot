@@ -6,6 +6,7 @@ import (
   "net/http"
   "log"
   "golang.org/x/net/websocket"
+  "github.com/christianrondeau/go-wit"
 )
 
 const (
@@ -33,6 +34,9 @@ func WebsocketServer(ws *websocket.Conn) {
 
 func main() {
   port := os.Getenv("PORT")
+  wit_ai_access_token := os.Getenv("WIT_AI_ACCESS_TOKEN")
+  wit_client := wit.NewClient(wit_ai_access_token)
+
   mux := http.NewServeMux()
   mux.Handle("/", http.FileServer(http.Dir(directory)))
   mux.Handle("/test", http.HandlerFunc(indexHandler))
