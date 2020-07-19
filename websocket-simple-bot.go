@@ -12,6 +12,7 @@ import (
 
 const (
   directory = "./web"
+  confidenceThreshold = 0.9
 )
 
 type T struct {
@@ -34,18 +35,29 @@ func WebsocketServer(ws *websocket.Conn) {
       log.Fatalln("error receiving json")
     }
     result, err := witClient.Message(data.Txt)
-    //result, err := witClient.Parse(&wit.MessageRequest{
-    //  Query: "hello",
-    //})
     if err != nil {
       log.Fatalln("error wit processing message")
     }
-    //log.Println(result.Entities["intent"].value)
-    log.Println(result)
+    //log.Println(result)
     //data, _ := json.MarshalIndent(result, "", "    ")
     //log.Println(string(data[:]))
     log.Printf("%v\n", result)
-    //data.Txt = result
+
+    var (
+      topEntity    wit.MessageEntity
+      topEntityKey string
+    )
+
+    for key, entityList := range result.Entities {
+      for _, entity := range entityList {
+        if entity.Confidence > confidenceThreshold && entity.Confidence > topEntity.Confidence {
+            topEntity = entity
+            topEntityKey = key
+        }
+      }
+    }
+
+    data.Txt = topEntityKey
     websocket.JSON.Send(ws, data)
   }
 }
