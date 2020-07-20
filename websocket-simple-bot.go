@@ -131,7 +131,6 @@ func WebsocketServer(ws *websocket.Conn) {
         } else {
           data.Txt = "Fail to send slack message"
         }
-        websocket.JSON.Send(ws, data)
       default:
         data.Txt = "¯\\_(o_o)_/¯"
     }
