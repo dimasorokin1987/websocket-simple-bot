@@ -19,7 +19,6 @@ const (
   directory = "./web"
   confidenceThreshold = 0.9
   slackUrl = "https://slack.com/api/chat.postMessage"
-
 )
 
 type T struct {
@@ -91,7 +90,7 @@ func WebsocketServer(ws *websocket.Conn) {
         client := http.Client{
           Timeout: timeout,
         }
-        request, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+        request, err := http.NewRequest("POST", slackUrl, bytes.NewBuffer(requestBody))
         if err != nil {
           log.Println(err)
         }
