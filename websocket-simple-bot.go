@@ -5,10 +5,10 @@ import (
   "os"
   "net/http"
   "log"
-  //"encoding/json"
-  //"io/ioutil"
-  //"bytes"
-  //"time"
+  "encoding/json"
+  "io/ioutil"
+  "bytes"
+  "time"
 
   "golang.org/x/net/websocket"
   wit "github.com/christianrondeau/go-wit"
@@ -62,8 +62,7 @@ func WebsocketServer(ws *websocket.Conn) {
       }
     }
 
-    data.Txt = topEntityKey
-/*
+    //data.Txt = topEntityKey
     switch topEntityKey {
       case "greetings":
         data.Txt = "Hello, user! How can I help you?"
@@ -74,7 +73,7 @@ func WebsocketServer(ws *websocket.Conn) {
         } else {
           log.Println("wolfram client: " + err.Error())
         }
-      case "slackMessage":
+      case "intent":
         data.Txt = "Enter your message:"
         websocket.JSON.Send(ws, data)
         err := websocket.JSON.Receive(ws, &data) 
@@ -113,7 +112,6 @@ func WebsocketServer(ws *websocket.Conn) {
       default:
         data.Txt = "¯\\_(o_o)_/¯"
     }
-*/
     websocket.JSON.Send(ws, data)
   }
 }
