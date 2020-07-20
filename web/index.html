@@ -19,7 +19,9 @@
       const socket = new WebSocket(url);
       
       const sendMessage=()=>{
-       socket.send($txt.value);
+       let text = $txt.value;
+       let pack = JSON.stringify({text});
+       socket.send(pack);
        alert('sended: '+$txt.value);
       };
       
@@ -41,7 +43,9 @@
       }
 
       socket.onmessage = function(event) {
-        alert("Data received: " + event.data)
+        //alert("Data received: " + event.data);
+        let{text}=JSON.parse(event.data);
+        alert(text);
       }
 
       socket.onerror = function(error) {
