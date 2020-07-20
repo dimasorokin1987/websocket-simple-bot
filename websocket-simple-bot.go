@@ -25,6 +25,22 @@ type T struct {
   Txt string `json:"text"`
 }
 
+type SlackMessage struct {
+  Type string `json:"type"`
+  SubType string `json:"subtype"`
+  Text string `json:"text"`
+  TimeStamp string `json:"ts"`
+  UserName string `json:"username"`
+  BotId string `json:"bot_id"`
+}
+
+type SlackMessageResult struct {
+  Ok bool `json:"ok"`
+  Channel string `json:"channel"`
+  TimeStamp string `json:"ts"`
+  Message SlackMessage `json:"message"`
+}
+
 var (
   witClient *wit.Client
   wolframClient *wolfram.Client
@@ -106,8 +122,15 @@ func WebsocketServer(ws *websocket.Conn) {
         if err != nil {
           log.Println(err)
         }
-        data.Txt = string(body)
-        //data.Txt = "Message was sended success"
+        //data.Txt = string(body)
+        slackRes := SlackMessageResult{}
+        json.Unmarshal([]byte(body), &slackRes)
+        log.Println(slackRes)
+        if slackRes.Ok && slackRes.Message.Text == data.Txt {
+          data.Txt = "Message was sended success"
+        } else {
+          data.Txt = "Fail to send slack message"
+        }
         websocket.JSON.Send(ws, data)
       default:
         data.Txt = "¯\\_(o_o)_/¯"
