@@ -9,10 +9,13 @@
     <h1>hello world 111</h1>
     <input type="text" id="txt">
     <button id="send">ok</button>
+    <br>
+    <div id="history"></div>
     <script>
       const $txt=document.querySelector('#txt');
       const $btnSend=document.querySelector('#send');
-      
+      const $history=document.querySelector('#history');
+
       //let url = 'wss://javascript.info/chat'
       const url = `wss://${location.hostname}/ws`
       alert(url)
@@ -22,7 +25,11 @@
        let text = $txt.value;
        let pack = JSON.stringify({text});
        socket.send(pack);
-       alert('sended: '+$txt.value);
+       //alert('sended: '+$txt.value);
+       let $msg=document.createElement('div');
+       $msg.innerText='>'+$txt.value;
+       $history.prepend($msg);
+       $txt.value='';
       };
       
       socket.onopen = function() {
@@ -46,6 +53,9 @@
         //alert("Data received: " + event.data);
         let{text}=JSON.parse(event.data);
         alert(text);
+        let $msg=document.createElement('div');
+        $msg.innerText='<-'+text;
+        $history.prepend($msg);
       }
 
       socket.onerror = function(error) {
