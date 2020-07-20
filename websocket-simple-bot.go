@@ -56,11 +56,13 @@ func WebsocketServer(ws *websocket.Conn) {
     data := T{}
     err := websocket.JSON.Receive(ws, &data) 
     if err != nil {
-      log.Fatalln("error receiving json")
+      log.Println("error receiving json")
+      continue
     }
     result, err := witClient.Message(data.Txt)
     if err != nil {
-      log.Fatalln("error wit processing message")
+      log.Println("error wit processing message")
+      continue
     }
     //log.Printf("%v\n", result)
 
@@ -88,6 +90,7 @@ func WebsocketServer(ws *websocket.Conn) {
           data.Txt = res
         } else {
           log.Println("wolfram client: " + err.Error())
+          continue
         }
       case "intent":
         data.Txt = "Enter your message:"
@@ -95,6 +98,7 @@ func WebsocketServer(ws *websocket.Conn) {
         err := websocket.JSON.Receive(ws, &data) 
         if err != nil {
           log.Println("error user message receiving json")
+          continue
         }
         requestBody, err := json.Marshal(map[string]string{
           "channel": "#general",
@@ -102,6 +106,7 @@ func WebsocketServer(ws *websocket.Conn) {
         })
         if err != nil {
           log.Println(err)
+          continue
         }
         timeout := time.Duration(5*time.Second)
         client := http.Client{
@@ -110,17 +115,20 @@ func WebsocketServer(ws *websocket.Conn) {
         request, err := http.NewRequest("POST", slackUrl, bytes.NewBuffer(requestBody))
         if err != nil {
           log.Println(err)
+          continue
         }
         request.Header.Set("Content-Type","application/json;charset=utf-8")
         request.Header.Set("Authorization","Bearer "+slackSecretKey)
         resp, err := client.Do(request)
         if err != nil {
           log.Println(err)
+          continue
         }
         defer resp.Body.Close()
         body, err := ioutil.ReadAll(resp.Body)
         if err != nil {
           log.Println(err)
+          continue
         }
         //data.Txt = string(body)
         slackRes := SlackMessageResult{}
