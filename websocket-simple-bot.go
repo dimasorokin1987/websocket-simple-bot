@@ -18,7 +18,7 @@ import (
 const (
   directory = "./web"
   confidenceThreshold = 0.9
-  slackUrl := "https://slack.com/api/chat.postMessage"
+  slackUrl = "https://slack.com/api/chat.postMessage"
 
 )
 
