@@ -62,6 +62,8 @@ func WebsocketServer(ws *websocket.Conn) {
       }
     }
 
+    data.Txt = topEntityKey
+/*
     switch topEntityKey {
       case "greetings":
         data.Txt = "Hello, user! How can I help you?"
@@ -111,7 +113,7 @@ func WebsocketServer(ws *websocket.Conn) {
       default:
         data.Txt = "¯\\_(o_o)_/¯"
     }
-
+*/
     websocket.JSON.Send(ws, data)
   }
 }
